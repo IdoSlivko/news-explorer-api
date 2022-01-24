@@ -2,10 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { errors, celebrate, Joi } = require('celebrate');
 const mongoose = require('mongoose');
-const NotFoundError = require('./middleware/errors/notFoundError');
+const cors = require('cors');
 const { requestLogger, errorLogger } = require('./middleware/logger');
-var cors = require('cors');
 require('dotenv').config();
+const NotFoundError = require('./middleware/errors/notFoundError');
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -34,10 +34,11 @@ app.use(errors());
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().email().normalize().required().max(50),
+    email: Joi.string().email().normalize().required()
+      .max(50),
     password: Joi.string().required().min(3),
-    name: Joi.string().required().min(2).max(30)
-  })
+    name: Joi.string().required().min(2).max(30),
+  }),
 }), createUser);
 
 app.post('/signin', login);
@@ -53,7 +54,7 @@ app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
 
   res.status(statusCode).send({
-    message: statusCode === 500 ? 'Internal server error' : message
+    message: statusCode === 500 ? 'Internal server error' : message,
   });
 });
 

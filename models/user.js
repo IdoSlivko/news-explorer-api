@@ -13,21 +13,21 @@ const userSchema = new mongoose.Schema({
       validator(value) {
         return validator.isEmail(value);
       },
-      message: 'Invalid email address'
-    }
+      message: 'Invalid email address',
+    },
   },
   password: {
     type: String,
     required: true,
     minlength: 3,
-    select: false
+    select: false,
   },
   name: {
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 30
-  }
+    maxlength: 30,
+  },
 });
 
 userSchema.statics.findUserByCredentials = function findUserByCredentials(email, password) {
