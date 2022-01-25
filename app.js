@@ -8,7 +8,7 @@ require('dotenv').config();
 const NotFoundError = require('./middleware/errors/notFoundError');
 
 const app = express();
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, NODE_ENV, SERVER_DB } = process.env;
 
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middleware/auth');
@@ -22,7 +22,7 @@ const invalidResource = (req, res, next) => {
   next();
 };
 
-mongoose.connect('mongodb://localhost:27017/news-explorer');
+mongoose.connect(NODE_ENV === 'production' ? SERVER_DB : 'mongodb://localhost:27017/news-explorer');
 
 app.use(cors());
 app.options('*', cors());
