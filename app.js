@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 require('dotenv').config();
+const limiter = require('./middleware/rate-limiter');
 const NotFoundError = require('./middleware/errors/notFoundError');
 
 const app = express();
@@ -30,6 +31,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
+app.use(limiter);
 app.use(errors());
 
 app.post('/signup', celebrate({

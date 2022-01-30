@@ -57,7 +57,13 @@ const deleteArticle = (req, res, next) => {
       Article.deleteOne(article)
         .then(() => res.send({ message: 'Article has been deleted' }));
     })
-    .catch((err) => next(err));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Bad request'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 // get user's saved articles
