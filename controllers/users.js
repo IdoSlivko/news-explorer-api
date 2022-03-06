@@ -59,6 +59,7 @@ const userInfo = (req, res, next) => {
       res.send({
         name: user.name,
         email: user.email,
+        _id: user._id,
       });
     })
     .catch((err) => next(err));
