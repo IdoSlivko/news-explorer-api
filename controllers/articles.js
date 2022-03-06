@@ -28,8 +28,10 @@ const saveArticle = (req, res, next) => {
     owner,
   })
     .then((article) => {
-      if (!article) { throw new Error(); }
-      res.status(201).send({ message: 'Article was saved' });
+      if (!article) {
+        throw new Error();
+      }
+      res.status(201).send(article);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -70,12 +72,12 @@ const deleteArticle = (req, res, next) => {
 const showArticle = (req, res, next) => {
   Article.find({ owner: req.user._id })
     .then((article) => {
-      if (article.length === 0) {
-        throw new NotFoundError('There are no saved articles');
+      if (!article) {
+        throw new Error();
       }
       res.send(article);
     })
-    .catch((err) => next(err));
+    .catch(err => next(err));
 };
 
 module.exports = { showArticle, saveArticle, deleteArticle };
